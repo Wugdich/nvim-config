@@ -32,30 +32,42 @@ call plug#begin('~/.vim/plugged')
 Plug 'neovim/nvim-lspconfig'
 Plug 'hrsh7th/nvim-cmp'
 Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/cmp-path'
+Plug 'hrsh7th/cmp-cmdline'
 Plug 'saadparwaiz1/cmp_luasnip'
 Plug 'L3MON4D3/LuaSnip'
 Plug 'nvim-lualine/lualine.nvim'
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'kyazdani42/nvim-tree.lua'
 
+" HTML/CSS/JS
+Plug 'mattn/emmet-vim'
 
-" color schemas
-Plug 'morhetz/gruvbox'  " colorscheme gruvbox
+" Color schemas.
+Plug 'morhetz/gruvbox' 
 
 call plug#end()
 
-" Appereance.
+" Emmet configuration.
+"
+" Enable just for html/css.
+let g:user_emmet_install_global = 0
+autocmd FileType html,css EmmetInstall
+" Redefine trigger key.
+let g:user_emmet_leader_key = ','
+" Only enable normal mode functions.
+let g:user_emmet_mode = 'n'
 
+
+" Appereance.
 colorscheme gruvbox
 if (has('termguicolors'))
   set termguicolors
 endif
 
-
-" turn off search highlight
+" Turn off search highlight.
 nnoremap ,<space> :nohlsearch<CR>
-
-
 
 lua << EOF
 -- Set completeopt to have a better completion experience
@@ -68,7 +80,7 @@ local luasnip = require 'luasnip'
 local cmp = require 'cmp'
 cmp.setup {
   completion = {
-    autocomplete = false
+    autocomplete = true
   },
   snippet = {
     expand = function(args)
@@ -113,10 +125,21 @@ cmp.setup {
 EOF
 
 
-
-
 lua << EOF
 local nvim_lsp = require('lspconfig')
+
+vim.diagnostic.config({
+  virtual_text = false
+})
+
+-- Mappings.
+-- See `:help vim.diagnostic.*` for documentation on any of the below functions
+local opts = { noremap=true, silent=true }
+vim.keymap.set('n', '<space>e', vim.diagnostic.open_float, opts)
+vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
+vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
+vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, opts)
+
 
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
@@ -144,10 +167,6 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
   buf_set_keymap('n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
   buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-  buf_set_keymap('n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
-  buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
-  buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
-  buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
   buf_set_keymap('n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
 
 end
