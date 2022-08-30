@@ -24,8 +24,13 @@ set shiftwidth=4
 set expandtab
 set autoindent
 set fileformat=unix
-filetype indent on      " load filetype-specific indent files
+filetype indent on
 
+" Specifice configuration for html type files.
+autocmd FileType html setlocal shiftwidth=2 softtabstop=2 tabstop=2 autoindent expandtab
+
+" Specifice configuration for python type files.
+autocmd FileType py setlocal shiftwidth=4 softtabstop=4 tabstop=4 autoindent expandtab
 
 call plug#begin('~/.vim/plugged')
 
