@@ -32,6 +32,9 @@ autocmd FileType html setlocal shiftwidth=2 softtabstop=2 tabstop=2 autoindent e
 " Specifice configuration for python type files.
 autocmd FileType py setlocal shiftwidth=4 softtabstop=4 tabstop=4 autoindent expandtab
 
+" Specifice configuration for css type files.
+autocmd FileType css setlocal shiftwidth=2 softtabstop=2 tabstop=2 autoindent expandtab
+
 call plug#begin('~/.vim/plugged')
 
 Plug 'neovim/nvim-lspconfig'
